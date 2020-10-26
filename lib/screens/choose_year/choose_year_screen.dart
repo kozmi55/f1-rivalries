@@ -1,3 +1,4 @@
+import 'package:f1_stats_app/screens/choose_driver/choose_drivers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -92,12 +93,16 @@ class _ChooseYearScreenState extends State<ChooseYearScreen> {
               width: 100,
               child: RaisedButton(
                 child: Text('Search'),
-                onPressed: _isYearValid() ? () => {} : null,
+                onPressed: _isYearValid() ? () => { _navigateToDriverSelection(context)} : null,
               ),
             )
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void _navigateToDriverSelection(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseDriversScreen(year: _year)));
   }
 }

@@ -1,7 +1,9 @@
-import 'package:f1_stats_app/screens/choose_year_screen.dart';
+import 'package:f1_stats_app/screens/choose_year/choose_year_screen.dart';
+import 'package:f1_stats_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  setupLocator();
   runApp(MyApp());
 }
 
