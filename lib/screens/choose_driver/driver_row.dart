@@ -8,17 +8,30 @@ class DriverRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
         Container(
-            alignment: Alignment.centerLeft,
-            child: Text(driver.name,
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold))),
+            width: 32.0,
+            margin: EdgeInsets.only(right: 8.0),
+            child: Text('${driver.position}.', style: TextStyle(fontSize: 20.0))),
         Container(
-            alignment: Alignment.centerLeft,
-            child: Text(driver.nationality,
-                style: TextStyle(
-                    fontSize: 12.0, color: Color.fromARGB(255, 128, 128, 128))))
+          alignment: Alignment.centerRight,
+          margin: EdgeInsets.only(right: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(driver.name, style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold))),
+              Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(driver.constructors,
+                      style: TextStyle(fontSize: 12.0, color: Color.fromARGB(255, 128, 128, 128))))
+            ],
+          ),
+        ),
+        Spacer(),
+        Container(child: Text('${driver.points} pts.', style: TextStyle(fontSize: 14.0)))
       ],
     );
   }

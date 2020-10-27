@@ -15,11 +15,17 @@ class ChooseDriversInteractor {
   }
 
   List<Driver> _mapDriversResponseToViewState(DriversResponse driversResponse) {
-    return driversResponse.drivers
-        .map((driverEntity) => Driver(
-            driverEntity.driverId,
-            '${driverEntity.givenName} ${driverEntity.familyName}',
-            driverEntity.nationality))
+    return driversResponse.driverStandings
+        .map((driverStanding) => Driver(
+            driverStanding.driverEntity.driverId,
+            '${driverStanding.driverEntity.givenName} ${driverStanding.driverEntity.familyName}',
+            _mapConstructors(driverStanding),
+            int.parse(driverStanding.position),
+            driverStanding.points))
         .toList();
+  }
+
+  String _mapConstructors(DriverStanding driverStanding) {
+    return driverStanding.constructors.map((constructor) => constructor.name).join(", ");
   }
 }
