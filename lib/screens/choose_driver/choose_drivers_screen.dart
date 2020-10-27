@@ -1,21 +1,24 @@
 import 'package:f1_stats_app/screens/choose_driver/choose_drivers_interactor.dart';
 import 'package:f1_stats_app/screens/choose_driver/choose_drivers_view_state.dart';
 import 'package:f1_stats_app/screens/choose_driver/driver_row.dart';
+import 'package:f1_stats_app/screens/compare_drivers/compare_drivers.dart';
 import 'package:f1_stats_app/utils/loading_indicator.dart';
 import 'package:f1_stats_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ChooseDriversScreen extends StatefulWidget {
-  ChooseDriversScreen({Key key, this.year}) : super(key: key);
-
   final int year;
+
+  ChooseDriversScreen({Key key, this.year}) : super(key: key);
 
   @override
   _ChooseDriversScreenState createState() => _ChooseDriversScreenState();
 }
 
 class _ChooseDriversScreenState extends State<ChooseDriversScreen> {
+  Driver _selectedDriver;
+
   Future<ChooseDriversViewState> _chooseDriversViewStateFuture;
 
   ChooseDriversInteractor get _interactor => locator<ChooseDriversInteractor>();
@@ -23,8 +26,7 @@ class _ChooseDriversScreenState extends State<ChooseDriversScreen> {
   @override
   Widget build(BuildContext context) {
     if (_chooseDriversViewStateFuture == null) {
-      _chooseDriversViewStateFuture =
-          _interactor.getDriversListForYear(widget.year);
+      _chooseDriversViewStateFuture = _interactor.getDriversListForYear(widget.year);
     }
 
     return Scaffold(
@@ -53,7 +55,7 @@ class _ChooseDriversScreenState extends State<ChooseDriversScreen> {
   Widget _chooseDriversBody(ChooseDriversViewState data) {
     return ListView.separated(
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      separatorBuilder: (context, index) => Divider(),
+      separatorBuilder: (context, index) => Divider(height: 1),
       itemCount: data.drivers.length + 1, // Add one for the header
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -62,15 +64,30 @@ class _ChooseDriversScreenState extends State<ChooseDriversScreen> {
           final item = data.drivers[index - 1];
           return InkWell(
               onTap: () => _selectDriver(context, item),
-              child: DriverRowWidget(driver: item));
+              child: DriverRowWidget(driver: item, selected: item == _selectedDriver));
         }
       },
     );
   }
 
   void _selectDriver(BuildContext context, Driver driver) {
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text('${driver.name} selected')));
+    setState(() {
+      if (_selectedDriver == null) {
+        _selectedDriver = driver;
+      } else if (_selectedDriver == driver) {
+        _selectedDriver = null;
+      } else {
+        _openComparisionScreen(context, _selectedDriver, driver);
+        _selectedDriver = null;
+      }
+    });
+  }
+
+  void _openComparisionScreen(BuildContext context, Driver selectedDriver, Driver driver) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CompareDriversScreen(driver1Id: selectedDriver.id, driver2Id: driver.id)));
   }
 
   Widget _createHeaderItem() {
