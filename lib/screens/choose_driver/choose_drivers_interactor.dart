@@ -1,16 +1,25 @@
+import 'package:f1_stats_app/network/api/drivers_api.dart';
+import 'package:f1_stats_app/network/entity/DriversResponse.dart';
 import 'package:f1_stats_app/screens/choose_driver/choose_drivers_view_state.dart';
+import 'package:f1_stats_app/utils/service_locator.dart';
 
 class ChooseDriversInteractor {
+  DriversApi _driversApi = locator<DriversApi>();
+
   Future<ChooseDriversViewState> getDriversListForYear(int year) async {
-    await Future.delayed(Duration(seconds: 2));
-    return ChooseDriversViewState(_generateStaticData());
+    final response = await _driversApi.getDriversForYear(year);
+    final driversResponse = DriversResponse.fromJson(response.data);
+
+    return ChooseDriversViewState(
+        _mapDriversResponseToViewState(driversResponse));
   }
 
-  List<Driver> _generateStaticData() {
-    final vettel = Driver('Vettel', 'Sebastian Vettel', 'Ferrari');
-    final leclerc = Driver('Leclerc', 'Charles Leclerc', 'Ferrari');
-    final hamilton = Driver('Hamilton', 'Lewis Hamilton', 'Mercedes');
-
-    return [vettel, leclerc, hamilton];
+  List<Driver> _mapDriversResponseToViewState(DriversResponse driversResponse) {
+    return driversResponse.drivers
+        .map((driverEntity) => Driver(
+            driverEntity.driverId,
+            '${driverEntity.givenName} ${driverEntity.familyName}',
+            driverEntity.nationality))
+        .toList();
   }
 }

@@ -10,10 +10,15 @@ class DriverRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(alignment: Alignment.centerLeft, child: Text(driver.name)),
         Container(
             alignment: Alignment.centerLeft,
-            child: Text(driver.constructorName))
+            child: Text(driver.name,
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold))),
+        Container(
+            alignment: Alignment.centerLeft,
+            child: Text(driver.nationality,
+                style: TextStyle(
+                    fontSize: 12.0, color: Color.fromARGB(255, 128, 128, 128))))
       ],
     );
   }

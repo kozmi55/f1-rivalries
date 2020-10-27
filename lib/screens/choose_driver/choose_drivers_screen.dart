@@ -51,14 +51,23 @@ class _ChooseDriversScreenState extends State<ChooseDriversScreen> {
   }
 
   Widget _chooseDriversBody(ChooseDriversViewState data) {
-    return ListView.builder(
+    return ListView.separated(
+      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      separatorBuilder: (context, index) => Divider(),
       itemCount: data.drivers.length,
       itemBuilder: (context, index) {
         final item = data.drivers[index];
 
-        return DriverRowWidget(driver: item);
+        return InkWell(
+            onTap: () => _selectDriver(context, item),
+            child: DriverRowWidget(driver: item));
       },
     );
+  }
+
+  void _selectDriver(BuildContext context, Driver driver) {
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text('${driver.name} selected')));
   }
 
   Widget _error() {

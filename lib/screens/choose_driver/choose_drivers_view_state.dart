@@ -9,11 +9,11 @@ class ChooseDriversViewState {
 class Driver {
   final String _id;
   final String _name;
-  final String _constructorName;
+  final String _nationality;
 
-  Driver(this._id, this._name, this._constructorName);
+  Driver(this._id, this._name, this._nationality);
 
-  String get constructorName => _constructorName;
+  String get nationality => _nationality;
 
   String get name => _name;
 
