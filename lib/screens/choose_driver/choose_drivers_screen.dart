@@ -29,7 +29,7 @@ class _ChooseDriversScreenState extends State<ChooseDriversScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.year.toString()),
+        title: Text('${widget.year} F1 World Championship'),
       ),
       body: FutureBuilder(
         future: _chooseDriversViewStateFuture,
@@ -54,13 +54,16 @@ class _ChooseDriversScreenState extends State<ChooseDriversScreen> {
     return ListView.separated(
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       separatorBuilder: (context, index) => Divider(),
-      itemCount: data.drivers.length,
+      itemCount: data.drivers.length + 1, // Add one for the header
       itemBuilder: (context, index) {
-        final item = data.drivers[index];
-
-        return InkWell(
-            onTap: () => _selectDriver(context, item),
-            child: DriverRowWidget(driver: item));
+        if (index == 0) {
+          return _createHeaderItem();
+        } else {
+          final item = data.drivers[index - 1];
+          return InkWell(
+              onTap: () => _selectDriver(context, item),
+              child: DriverRowWidget(driver: item));
+        }
       },
     );
   }
@@ -68,6 +71,33 @@ class _ChooseDriversScreenState extends State<ChooseDriversScreen> {
   void _selectDriver(BuildContext context, Driver driver) {
     Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text('${driver.name} selected')));
+  }
+
+  Widget _createHeaderItem() {
+    return Column(
+      children: [
+        Image(
+          width: 300.0,
+          image: AssetImage('assets/F1-Logo.png'),
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 32.0),
+          child: Text(
+            '${widget.year} F1 World Championship',
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 32.0),
+          child: Text(
+            'Select two drivers to compare their performance',
+            style: TextStyle(fontSize: 20.0),
+            textAlign: TextAlign.center,
+          ),
+        )
+      ],
+    );
   }
 
   Widget _error() {
