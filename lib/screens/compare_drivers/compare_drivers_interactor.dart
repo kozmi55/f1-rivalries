@@ -22,11 +22,13 @@ class CompareDriversInteractor {
     final driverStanding2 =
         driversResponse.driverStandings.firstWhere((element) => element.driverEntity.driverId == driver2Id);
 
-    return CompareDriversViewState(
-        _mapResults(driverResults1, driverStanding1), _mapResults(driverResults2, driverStanding2));
+    final headToHead = _getHeadToHead(driverResults1, driverResults2);
+
+    return CompareDriversViewState(_mapResults(driverResults1, driverStanding1, headToHead[0]),
+        _mapResults(driverResults2, driverStanding2, headToHead[1]));
   }
 
-  DriverResults _mapResults(DriverResultsResponse response, DriverStanding driversStanding) {
+  DriverResults _mapResults(DriverResultsResponse response, DriverStanding driversStanding, int headToHead) {
     final raceTable = response.mrData.raceTable;
 
     return DriverResults(
@@ -37,7 +39,7 @@ class CompareDriversInteractor {
         _getWins(raceTable),
         _getPodiums(raceTable),
         _getPointsFinishes(raceTable),
-        0); // TODO Head to head
+        headToHead);
   }
 
   String _getName(RaceTable raceTable) {
@@ -71,6 +73,32 @@ class CompareDriversInteractor {
   bool _isPodiumPosition(String element) => element == "1" || element == "2" || element == "3";
 
   int _getPointsFinishes(RaceTable raceTable) {
-    return raceTable.races.map((race) => race.results[0].points).where((element) => element != "0").length;
+    return raceTable.races
+        .map((race) => race.results[0].points)
+        .where((element) => element != "0")
+        .length;
+  }
+
+  List<int> _getHeadToHead(DriverResultsResponse driverResults1, DriverResultsResponse driverResults2) {
+    Map<String, int> driver1PositionsByRound = Map();
+    driverResults1.mrData.raceTable.races.forEach((race) {
+      driver1PositionsByRound[race.round] = int.parse(race.results[0].position);
+    });
+
+    var driver1Better = 0;
+    var driver2Better = 0;
+
+    driverResults2.mrData.raceTable.races.forEach((race) {
+      if (driver1PositionsByRound.containsKey(race.round)) {
+        final driver1Pos = driver1PositionsByRound[race.round];
+        final driver2Pos = int.parse(race.results[0].position);
+        if (driver1Pos < driver2Pos)
+          driver1Better++;
+        else
+          driver2Better++;
+      }
+    });
+
+    return [driver1Better, driver2Better];
   }
 }
