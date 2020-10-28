@@ -1,7 +1,7 @@
 import 'package:f1_stats_app/screens/choose_driver/choose_drivers_interactor.dart';
 import 'package:f1_stats_app/screens/choose_driver/choose_drivers_view_state.dart';
 import 'package:f1_stats_app/screens/choose_driver/driver_row.dart';
-import 'package:f1_stats_app/screens/compare_drivers/compare_drivers.dart';
+import 'package:f1_stats_app/screens/compare_drivers/compare_drivers_screen.dart';
 import 'package:f1_stats_app/utils/loading_indicator.dart';
 import 'package:f1_stats_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +87,8 @@ class _ChooseDriversScreenState extends State<ChooseDriversScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => CompareDriversScreen(driver1Id: selectedDriver.id, driver2Id: driver.id)));
+            builder: (context) =>
+                CompareDriversScreen(year: widget.year, driver1Id: selectedDriver.id, driver2Id: driver.id)));
   }
 
   Widget _createHeaderItem() {
