@@ -1,5 +1,5 @@
 import 'package:f1_stats_app/network/api/drivers_api.dart';
-import 'package:f1_stats_app/network/entity/DriversResponse.dart';
+import 'package:f1_stats_app/network/entity/drivers_response.dart';
 import 'package:f1_stats_app/screens/choose_driver/choose_drivers_view_state.dart';
 import 'package:f1_stats_app/utils/service_locator.dart';
 
