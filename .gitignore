@@ -9,7 +9,7 @@
 /build/
 
 # Generated Dart files
-**/*.g.dart
+*.g.dart
 
 # IntelliJ related
 *.iml
