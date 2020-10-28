@@ -7,7 +7,7 @@ class DioConfig {
   DioConfig({this.baseUrl = 'http://ergast.com/api/f1'});
 
   Dio get dio {
-    final cacheOptions = buildCacheOptions(Duration(hours: 2));
+    final cacheOptions = buildCacheOptions(Duration(days: 1));
 
     final options = BaseOptions(baseUrl: baseUrl, extra: cacheOptions.extra);
 

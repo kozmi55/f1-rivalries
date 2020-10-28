@@ -22,6 +22,9 @@ class _CompareDriversScreenState extends State<CompareDriversScreen> {
 
   CompareDriversInteractor get _interactor => locator<CompareDriversInteractor>();
 
+  final positiveColor = Color.fromARGB(31, 0, 255, 0);
+  final negativeColor = Color.fromARGB(31, 255, 0, 0);
+
   @override
   Widget build(BuildContext context) {
     if (_compareDriversViewStateFuture == null) {
@@ -56,35 +59,60 @@ class _CompareDriversScreenState extends State<CompareDriversScreen> {
   Widget _compareDriversBody(CompareDriversViewState data) {
     return Column(children: [
       CompareDriverRow(
-          description: 'Name', driverData1: data.driverResults1.name, driverData2: data.driverResults2.name),
+          description: '',
+          driverData1: data.driverResults1.name,
+          driverData2: data.driverResults2.name,
+          driverDataStyle: TextStyle(color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold)),
       CompareDriverRow(
           description: 'Ranking',
           driverData1: '${data.driverResults1.championshipPosition}.',
           driverData2: '${data.driverResults2.championshipPosition}.'),
       CompareDriverRow(
           description: 'Points',
-          driverData1: '${data.driverResults1.championshipPoints} pts.',
-          driverData2: '${data.driverResults2.championshipPoints} pts.'),
+          driverData1: '${_formatValue(data.driverResults1.championshipPoints)} pts.',
+          driverData2: '${_formatValue(data.driverResults2.championshipPoints)} pts.'),
       CompareDriverRow(
           description: 'Average points per race',
-          driverData1: '${data.driverResults1.pointsPerRace} pts.',
-          driverData2: '${data.driverResults2.pointsPerRace} pts.'),
+          driverData1: '${_formatValue(data.driverResults1.pointsPerRace)} pts.',
+          driverData2: '${_formatValue(data.driverResults2.pointsPerRace)} pts.'),
       CompareDriverRow(
           description: 'Wins',
           driverData1: '${data.driverResults1.wins}',
-          driverData2: '${data.driverResults2.wins}'),
+          driverData2: '${data.driverResults2.wins}',
+          driver1Color: _getBackgroundColor(data.driverResults1.wins, data.driverResults2.wins),
+          driver2Color: _getBackgroundColor(data.driverResults2.wins, data.driverResults1.wins)),
       CompareDriverRow(
           description: 'Podiums',
           driverData1: '${data.driverResults1.podiums}',
-          driverData2: '${data.driverResults2.podiums}'),
+          driverData2: '${data.driverResults2.podiums}',
+          driver1Color: _getBackgroundColor(data.driverResults1.podiums, data.driverResults2.podiums),
+          driver2Color: _getBackgroundColor(data.driverResults2.podiums, data.driverResults1.podiums)),
       CompareDriverRow(
           description: 'Points finishes',
           driverData1: '${data.driverResults1.pointsFinishes}',
-          driverData2: '${data.driverResults2.pointsFinishes}'),
+          driverData2: '${data.driverResults2.pointsFinishes}',
+          driver1Color: _getBackgroundColor(data.driverResults1.pointsFinishes, data.driverResults2.pointsFinishes),
+          driver2Color: _getBackgroundColor(data.driverResults2.pointsFinishes, data.driverResults1.pointsFinishes)),
       CompareDriverRow(
-          description: 'Head to head results',
+          description: 'Head to head',
           driverData1: '${data.driverResults1.headToHead}',
-          driverData2: '${data.driverResults2.headToHead}')
+          driverData2: '${data.driverResults2.headToHead}',
+          driver1Color: _getBackgroundColor(data.driverResults1.headToHead, data.driverResults2.headToHead),
+          driver2Color: _getBackgroundColor(data.driverResults2.headToHead, data.driverResults1.headToHead))
     ]);
+  }
+
+  Color _getBackgroundColor(int value, int otherValue) {
+    if (value == otherValue) {
+      return Colors.transparent;
+    } else if (value > otherValue) {
+      return positiveColor;
+    } else {
+      return negativeColor;
+    }
+  }
+
+  String _formatValue(double value) {
+    return value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 2);
   }
 }
