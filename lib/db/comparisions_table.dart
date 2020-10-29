@@ -55,15 +55,21 @@ class ComparisionsTable {
   Future<int> _getComparisionId(DriverComparision driverComparision) async {
     List<Map<String, dynamic>> result = await db.query(tableName,
         columns: allColumns,
-        where: '$year = ? AND $driverId1 = ? AND $driverId2 = ?',
-        whereArgs: [driverComparision.year, driverComparision.driverId1, driverComparision.driverId2]);
+        where: '$year = ? AND ($driverId1 = ? OR $driverId1 = ?) AND ($driverId2 = ? OR $driverId2 = ?)',
+        whereArgs: [
+          driverComparision.year,
+          driverComparision.driverId1,
+          driverComparision.driverId2,
+          driverComparision.driverId1,
+          driverComparision.driverId2
+        ]);
 
     return result.isNotEmpty ? result.first[columnId] : null;
   }
 
   Future<List<DriverComparision>> getRecentComparisions() async {
     List<Map<String, dynamic>> result =
-    await db.query(tableName, columns: allColumns, orderBy: '$lastViewTimestamp DESC', limit: 5);
+        await db.query(tableName, columns: allColumns, orderBy: '$lastViewTimestamp DESC', limit: 10);
 
     return result.map((resultMap) => fromMap(resultMap)).toList();
   }

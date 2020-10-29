@@ -36,37 +36,53 @@ class _ChooseYearScreenState extends State<ChooseYearScreen> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          margin: EdgeInsets.only(bottom: 16.0, top: 64.0),
-          child: Text(
-            'Select the year you want to compare statistics of the drivers',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20.0),
-          ),
-        ),
-        Container(
-            margin: EdgeInsets.only(bottom: 16.0),
-            width: 100.0,
-            child: TextField(
-              decoration: InputDecoration(hintText: "Year"),
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            margin: EdgeInsets.only(bottom: 16.0, top: 64.0),
+            child: Text(
+              'Select the year you want to compare performance of the drivers',
               textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              onChanged: (value) => _setYear(int.parse(value)),
-            )),
-        Container(
-          width: 100,
-          child: RaisedButton(
-            child: Text('Search'),
-            onPressed: _isYearValid() ? () => {_navigateToDriverSelection(context)} : null,
+              style: TextStyle(fontSize: 20.0),
+            ),
           ),
-        ),
-        Container(
-          child: RecentComparisionsView(),
-        )
-      ],
+          Container(
+              margin: EdgeInsets.only(bottom: 16.0),
+              width: 100.0,
+              child: TextField(
+                decoration: InputDecoration(hintText: 'Year'),
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                onChanged: (value) => _setYear(int.parse(value)),
+              )),
+          Container(
+            width: 100,
+            margin: EdgeInsets.only(bottom: 32.0),
+            child: RaisedButton(
+              child: Text('Search'),
+              onPressed: _isYearValid() ? () => {_navigateToDriverSelection(context)} : null,
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomLeft,
+            child: Text('Recent Searches',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0), textAlign: TextAlign.start),
+            margin: EdgeInsets.only(bottom: 4.0, left: 4.0),
+          ),
+          Container(
+            height: 1.0,
+            color: Colors.black26,
+            margin: EdgeInsets.only(bottom: 16.0, left: 4.0, right: 4.0),
+          ),
+          Container(
+            child: RecentComparisionsView(),
+            margin: EdgeInsets.only(bottom: 16.0),
+          )
+        ],
+      ),
     );
   }
 

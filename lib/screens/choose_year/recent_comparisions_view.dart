@@ -1,6 +1,6 @@
 import 'package:f1_stats_app/screens/choose_year/recent_comparision_view_state.dart';
 import 'package:f1_stats_app/screens/choose_year/recent_comparisions_interactor.dart';
-import 'package:f1_stats_app/screens/compare_drivers/compare_driver_row.dart';
+import 'package:f1_stats_app/screens/choose_year/saved_comparision_row.dart';
 import 'package:f1_stats_app/utils/loading_indicator.dart';
 import 'package:f1_stats_app/utils/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -40,16 +40,14 @@ class _RecentComparisionsViewState extends State<RecentComparisionsView> {
     );
   }
 
-  // TODO Create NestedListView to scroll together with other content.
   Widget _recentComparisionsBody(RecentComparisionsViewState data) {
-    return Expanded(
-      child: ListView.builder(
-          itemCount: data.recentComparisions.length,
-          itemBuilder: (context, index) {
-            final item = data.recentComparisions[index];
-            return CompareDriverRow(
-                description: item.year.toString(), driverData1: item.driverName1, driverData2: item.driverName2);
-          }),
-    );
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: data.recentComparisions.length,
+        itemBuilder: (context, index) {
+          final item = data.recentComparisions[index];
+          return SavedComparisionRow(driverComparision: item);
+        });
   }
 }
