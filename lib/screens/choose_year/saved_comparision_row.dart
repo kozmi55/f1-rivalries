@@ -5,8 +5,9 @@ import 'package:flutter/widgets.dart';
 
 class SavedComparisionRow extends StatelessWidget {
   final DriverComparision driverComparision;
+  final Function onPop;
 
-  SavedComparisionRow({Key key, this.driverComparision}) : super(key: key);
+  SavedComparisionRow({Key key, this.driverComparision, this.onPop}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +61,6 @@ class SavedComparisionRow extends StatelessWidget {
             builder: (context) => CompareDriversScreen(
                 year: driverComparision.year,
                 driver1Id: driverComparision.driverId1,
-                driver2Id: driverComparision.driverId2)));
+                driver2Id: driverComparision.driverId2))).then(onPop);
   }
 }

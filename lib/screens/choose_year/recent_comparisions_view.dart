@@ -47,7 +47,11 @@ class _RecentComparisionsViewState extends State<RecentComparisionsView> {
         itemCount: data.recentComparisions.length,
         itemBuilder: (context, index) {
           final item = data.recentComparisions[index];
-          return SavedComparisionRow(driverComparision: item);
+          return SavedComparisionRow(driverComparision: item, onPop: (value) => _updateState());
         });
+  }
+
+  void _updateState() {
+    setState(() => _recentComparisionsViewStateFuture = null);
   }
 }
