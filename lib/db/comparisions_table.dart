@@ -14,7 +14,7 @@ class ComparisionsTable {
   static const String driverName2 = 'driver_name_2';
   static const String lastViewTimestamp = 'last_view_timestamp';
 
-  static const allColumns = [year, driverId1, driverId2, driverName1, driverName2, lastViewTimestamp];
+  static const allColumns = [columnId, year, driverId1, driverId2, driverName1, driverName2, lastViewTimestamp];
 
   Database db = locator<DbWrapper>().database;
 
@@ -44,12 +44,26 @@ class ComparisionsTable {
   }
 
   Future<int> insertComparision(DriverComparision data, int timestamp) async {
-    return await db.insert(tableName, toMap(data, timestamp));
+    final comparisionId = await _getComparisionId(data);
+    if (comparisionId != null) {
+      return await db.update(tableName, toMap(data, timestamp), where: '$columnId = ?', whereArgs: [comparisionId]);
+    } else {
+      return await db.insert(tableName, toMap(data, timestamp));
+    }
+  }
+
+  Future<int> _getComparisionId(DriverComparision driverComparision) async {
+    List<Map<String, dynamic>> result = await db.query(tableName,
+        columns: allColumns,
+        where: '$year = ? AND $driverId1 = ? AND $driverId2 = ?',
+        whereArgs: [driverComparision.year, driverComparision.driverId1, driverComparision.driverId2]);
+
+    return result.isNotEmpty ? result.first[columnId] : null;
   }
 
   Future<List<DriverComparision>> getRecentComparisions() async {
     List<Map<String, dynamic>> result =
-        await db.query(tableName, columns: allColumns, orderBy: '$lastViewTimestamp DESC', limit: 5);
+    await db.query(tableName, columns: allColumns, orderBy: '$lastViewTimestamp DESC', limit: 5);
 
     return result.map((resultMap) => fromMap(resultMap)).toList();
   }
