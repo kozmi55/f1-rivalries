@@ -1,11 +1,14 @@
+import 'package:f1_stats_app/db/comparisions_table.dart';
 import 'package:f1_stats_app/network/api/drivers_api.dart';
 import 'package:f1_stats_app/network/entity/drivers_response.dart';
 import 'package:f1_stats_app/network/entity/drivers_results_response.dart';
+import 'package:f1_stats_app/screens/choose_year/recent_comparision_view_state.dart';
 import 'package:f1_stats_app/screens/compare_drivers/compare_drivers_view_state.dart';
 import 'package:f1_stats_app/utils/service_locator.dart';
 
 class CompareDriversInteractor {
-  DriversApi _driversApi = locator<DriversApi>();
+  final DriversApi _driversApi = locator<DriversApi>();
+  final ComparisionsTable _comparisionsTable = locator<ComparisionsTable>();
 
   Future<CompareDriversViewState> getDriverResults(int year, String driver1Id, String driver2Id) async {
     final driverResults1 = await _driversApi.getDriverResultsForYear(year, driver1Id);
@@ -24,8 +27,13 @@ class CompareDriversInteractor {
 
     final headToHead = _getHeadToHead(driverResults1, driverResults2);
 
-    return CompareDriversViewState(_mapResults(driverResults1, driverStanding1, headToHead[0]),
-        _mapResults(driverResults2, driverStanding2, headToHead[1]));
+    var driver1 = _mapResults(driverResults1, driverStanding1, headToHead[0]);
+    var driver2 = _mapResults(driverResults2, driverStanding2, headToHead[1]);
+
+    _comparisionsTable.insertComparision(DriverComparision(year, driver1Id, driver2Id, driver1.name, driver2.name),
+        DateTime.now().millisecondsSinceEpoch);
+
+    return CompareDriversViewState(driver1, driver2);
   }
 
   DriverResults _mapResults(DriverResultsResponse response, DriverStanding driversStanding, int headToHead) {
