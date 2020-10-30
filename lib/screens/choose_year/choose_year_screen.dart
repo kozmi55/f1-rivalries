@@ -69,17 +69,6 @@ class _ChooseYearScreenState extends State<ChooseYearScreen> {
             ),
           ),
           Container(
-            alignment: Alignment.bottomLeft,
-            child: Text('Recent Searches',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0), textAlign: TextAlign.start),
-            margin: EdgeInsets.only(bottom: 4.0, left: 4.0),
-          ),
-          Container(
-            height: 1.0,
-            color: Colors.black26,
-            margin: EdgeInsets.only(bottom: 16.0, left: 4.0, right: 4.0),
-          ),
-          Container(
             child: RecentComparisionsView(shouldRefreshList: _shouldRefreshRecentSearches),
             margin: EdgeInsets.only(bottom: 16.0),
           )

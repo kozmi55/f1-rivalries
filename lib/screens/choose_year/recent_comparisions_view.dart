@@ -43,14 +43,35 @@ class _RecentComparisionsViewState extends State<RecentComparisionsView> {
   }
 
   Widget _recentComparisionsBody(RecentComparisionsViewState data) {
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: data.recentComparisions.length,
-        itemBuilder: (context, index) {
-          final item = data.recentComparisions[index];
-          return SavedComparisionRow(driverComparision: item, onPop: (value) => _updateState());
-        });
+    return Column(
+      children: [
+        if (data.recentComparisions.isNotEmpty) _recentComparisionsHeader(),
+        ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: data.recentComparisions.length,
+            itemBuilder: (context, index) {
+              final item = data.recentComparisions[index];
+              return SavedComparisionRow(driverComparision: item, onPop: (value) => _updateState());
+            }),
+      ],
+    );
+  }
+
+  Widget _recentComparisionsHeader() {
+    return Column(children: [
+      Container(
+        alignment: Alignment.bottomLeft,
+        child: Text('Recent Searches',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0), textAlign: TextAlign.start),
+        margin: EdgeInsets.only(bottom: 4.0, left: 4.0),
+      ),
+      Container(
+        height: 1.0,
+        color: Colors.black26,
+        margin: EdgeInsets.only(bottom: 16.0, left: 4.0, right: 4.0),
+      )
+    ]);
   }
 
   void _updateState() {
