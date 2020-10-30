@@ -40,7 +40,7 @@ class CompareDriversInteractor {
     final raceTable = response.mrData.raceTable;
 
     return DriverResults(
-        _getName(raceTable),
+        _getName(driversStanding),
         _getChampionshipPosition(driversStanding),
         _getTotalPoints(driversStanding),
         _getAveragePoints(driversStanding, raceTable),
@@ -50,8 +50,8 @@ class CompareDriversInteractor {
         headToHead);
   }
 
-  String _getName(RaceTable raceTable) {
-    final driver = raceTable.races[0].results[0].driver;
+  String _getName(DriverStanding driverStanding) {
+    final driver = driverStanding.driverEntity;
     return '${driver.givenName} ${driver.familyName}';
   }
 
