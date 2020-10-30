@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class RecentComparisionsView extends StatefulWidget {
-  RecentComparisionsView({Key key}) : super(key: key);
+  RecentComparisionsView({Key key, this.shouldRefreshList = false}) : super(key: key);
+
+  final bool shouldRefreshList;
 
   @override
   _RecentComparisionsViewState createState() => _RecentComparisionsViewState();
@@ -20,7 +22,7 @@ class _RecentComparisionsViewState extends State<RecentComparisionsView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_recentComparisionsViewStateFuture == null) {
+    if (_recentComparisionsViewStateFuture == null || widget.shouldRefreshList) {
       _recentComparisionsViewStateFuture = _interactor.getRecentComparisions();
     }
 

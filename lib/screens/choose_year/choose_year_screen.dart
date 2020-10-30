@@ -14,9 +14,11 @@ class ChooseYearScreen extends StatefulWidget {
 
 class _ChooseYearScreenState extends State<ChooseYearScreen> {
   int _year = 0;
+  bool _shouldRefreshRecentSearches = false;
 
   void _setYear(int year) {
     setState(() {
+      this._shouldRefreshRecentSearches = false;
       this._year = year;
     });
   }
@@ -78,7 +80,7 @@ class _ChooseYearScreenState extends State<ChooseYearScreen> {
             margin: EdgeInsets.only(bottom: 16.0, left: 4.0, right: 4.0),
           ),
           Container(
-            child: RecentComparisionsView(),
+            child: RecentComparisionsView(shouldRefreshList: _shouldRefreshRecentSearches),
             margin: EdgeInsets.only(bottom: 16.0),
           )
         ],
@@ -87,6 +89,13 @@ class _ChooseYearScreenState extends State<ChooseYearScreen> {
   }
 
   void _navigateToDriverSelection(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseDriversScreen(year: _year)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseDriversScreen(year: _year)))
+        .then((value) => _invalidateRecentSearches());
+  }
+
+  _invalidateRecentSearches() {
+    setState(() {
+      _shouldRefreshRecentSearches = true;
+    });
   }
 }
