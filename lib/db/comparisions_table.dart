@@ -1,5 +1,5 @@
 import 'package:f1_stats_app/db/db_wrapper.dart';
-import 'package:f1_stats_app/screens/choose_year/recent_comparision_view_state.dart';
+import 'package:f1_stats_app/screens/choose_year/comparisions_list_view_state.dart';
 import 'package:f1_stats_app/utils/service_locator.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -13,8 +13,18 @@ class ComparisionsTable {
   static const String driverName1 = 'driver_name_1';
   static const String driverName2 = 'driver_name_2';
   static const String lastViewTimestamp = 'last_view_timestamp';
+  static const String favorite = 'favorite';
 
-  static const allColumns = [columnId, year, driverId1, driverId2, driverName1, driverName2, lastViewTimestamp];
+  static const allColumns = [
+    columnId,
+    year,
+    driverId1,
+    driverId2,
+    driverName1,
+    driverName2,
+    lastViewTimestamp,
+    favorite
+  ];
 
   Database db = locator<DbWrapper>().database;
 
@@ -39,17 +49,38 @@ class ComparisionsTable {
         $driverId2 text not null,
         $driverName1 text not null,
         $driverName2 text not null,
-        $lastViewTimestamp integer )
+        $lastViewTimestamp integer,
+        $favorite integer )
       ''');
   }
 
   Future<int> insertComparision(DriverComparision data, int timestamp) async {
     final comparisionId = await _getComparisionId(data);
+    var columnsMap = toMap(data, timestamp);
+    return await insertOrUpdateComparision(comparisionId, columnsMap);
+  }
+
+  Future<int> insertFavorite(DriverComparision data, int timestamp, bool isFavorite) async {
+    final comparisionId = await _getComparisionId(data);
+    var columnsMap = toMap(data, timestamp);
+    columnsMap[favorite] = isFavorite ? 1 : 0;
+    return await insertOrUpdateComparision(comparisionId, columnsMap);
+  }
+
+  Future<int> insertOrUpdateComparision(int comparisionId, Map<String, dynamic> columnsMap) async {
     if (comparisionId != null) {
-      return await db.update(tableName, toMap(data, timestamp), where: '$columnId = ?', whereArgs: [comparisionId]);
+      return await db.update(
+          tableName, columnsMap, where: '$columnId = ?', whereArgs: [comparisionId]);
     } else {
-      return await db.insert(tableName, toMap(data, timestamp));
+      return await db.insert(tableName, columnsMap);
     }
+  }
+
+  Future<bool> isFavorite(DriverComparision data) async {
+    final comparisionId = await _getComparisionId(data);
+    List<Map<String, dynamic>> result = await db.query(tableName, columns: [favorite], where: '$columnId = ?', whereArgs: [comparisionId]);
+
+    return result.first[favorite] == 1;
   }
 
   Future<int> _getComparisionId(DriverComparision driverComparision) async {
@@ -69,7 +100,14 @@ class ComparisionsTable {
 
   Future<List<DriverComparision>> getRecentComparisions() async {
     List<Map<String, dynamic>> result =
-        await db.query(tableName, columns: allColumns, orderBy: '$lastViewTimestamp DESC', limit: 10);
+    await db.query(tableName, columns: allColumns, orderBy: '$lastViewTimestamp DESC', limit: 5);
+
+    return result.map((resultMap) => fromMap(resultMap)).toList();
+  }
+
+  Future<List<DriverComparision>> getFavoriteComparisions() async {
+    List<Map<String, dynamic>> result =
+    await db.query(tableName, columns: allColumns, orderBy: '$lastViewTimestamp DESC', where: '$favorite = 1');
 
     return result.map((resultMap) => fromMap(resultMap)).toList();
   }

@@ -1,5 +1,5 @@
 import 'package:f1_stats_app/screens/choose_driver/choose_drivers_screen.dart';
-import 'package:f1_stats_app/screens/choose_year/recent_comparisions_view.dart';
+import 'package:f1_stats_app/screens/choose_year/comparisions_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -62,14 +62,14 @@ class _ChooseYearScreenState extends State<ChooseYearScreen> {
               )),
           Container(
             width: 100,
-            margin: EdgeInsets.only(bottom: 32.0),
+            margin: EdgeInsets.only(bottom: 16.0),
             child: RaisedButton(
               child: Text('Search'),
               onPressed: _isYearValid() ? () => {_navigateToDriverSelection(context)} : null,
             ),
           ),
           Container(
-            child: RecentComparisionsView(shouldRefreshList: _shouldRefreshRecentSearches),
+            child: ComparisionsListView(shouldRefreshList: _shouldRefreshRecentSearches),
             margin: EdgeInsets.only(bottom: 16.0),
           )
         ],

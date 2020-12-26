@@ -1,4 +1,4 @@
-import 'package:f1_stats_app/screens/choose_year/recent_comparision_view_state.dart';
+import 'package:f1_stats_app/screens/choose_year/comparisions_list_view_state.dart';
 import 'package:f1_stats_app/screens/compare_drivers/compare_drivers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

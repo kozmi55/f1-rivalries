@@ -1,8 +1,9 @@
 class CompareDriversViewState {
   final DriverResults driverResults1;
   final DriverResults driverResults2;
+  final bool isFavorite;
 
-  CompareDriversViewState(this.driverResults1, this.driverResults2);
+  CompareDriversViewState(this.driverResults1, this.driverResults2, this.isFavorite);
 }
 
 class DriverResults {
