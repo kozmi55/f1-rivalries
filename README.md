@@ -1,16 +1,9 @@
-# f1_stats_app
+# F1 Rivalries
 
-Flutter mobile app to compare F1 drivers performance
+Simple Flutter app to compare statistics of F1 drivers, using the Ergast F1 API. 
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- List F1 drivers championship results for the selected year.
+- Compare drivers performance in the same season.
+- Save recent and favorite searches.
