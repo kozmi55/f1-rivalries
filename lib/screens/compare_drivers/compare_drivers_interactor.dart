@@ -1,3 +1,4 @@
+import 'package:f1_stats_app/db/comparisions_cache.dart';
 import 'package:f1_stats_app/network/api/drivers_api.dart';
 import 'package:f1_stats_app/network/entity/drivers_response.dart';
 import 'package:f1_stats_app/network/entity/drivers_results_response.dart';
@@ -7,6 +8,7 @@ import 'package:f1_stats_app/utils/service_locator.dart';
 
 class CompareDriversInteractor {
   final DriversApi _driversApi = locator<DriversApi>();
+  final ComparisionsCache _comparisionsCache = locator<ComparisionsCache>();
 
   DriverComparision _currentComparision;
 
@@ -31,8 +33,11 @@ class CompareDriversInteractor {
     var driver2 = _mapResults(driverResults2, driverStanding2, headToHead[1]);
 
     _currentComparision = DriverComparision(year, driver1Id, driver2Id, driver1.name, driver2.name);
+    _comparisionsCache.insertRecentComparision(_currentComparision);
 
-    return CompareDriversViewState(driver1, driver2, false);
+    final isFavorite = await _comparisionsCache.isFavorite(_currentComparision);
+
+    return CompareDriversViewState(driver1, driver2, isFavorite);
   }
 
   DriverResults _mapResults(DriverResultsResponse response, DriverStanding driversStanding, int headToHead) {
@@ -107,5 +112,13 @@ class CompareDriversInteractor {
     });
 
     return [driver1Better, driver2Better];
+  }
+
+  void addToFavorites() {
+    _comparisionsCache.insertFavorite(_currentComparision);
+  }
+
+  void removeFromFavorites() {
+    _comparisionsCache.removeFavorite(_currentComparision);
   }
 }

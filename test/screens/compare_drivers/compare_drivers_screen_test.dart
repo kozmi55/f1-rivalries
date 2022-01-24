@@ -9,10 +9,10 @@ import 'package:mockito/mockito.dart';
 
 import '../../test_utils.dart';
 
-void main() {
+void main() async {
   final _interactor = _MockCompareDriversInteractor();
 
-  setupTestLocator((locator) {
+  await setupTestLocator((locator) {
     locator.registerFactory<CompareDriversInteractor>(() => _interactor);
   });
 
@@ -52,7 +52,7 @@ void main() {
   testWidgets('Show correct data, when data is loaded', (tester) async {
     final driverResults1 = DriverResults('Sebastian Vettel', 1, 200, 15, 5, 10, 15, 10);
     final driverResults2 = DriverResults('Fernando Alonso', 2, 180, 14, 4, 10, 13, 7);
-    final compareDriversViewState = CompareDriversViewState(driverResults1, driverResults2);
+    final compareDriversViewState = CompareDriversViewState(driverResults1, driverResults2, false);
 
     when(_interactor.getDriverResults(any, any, any))
         .thenAnswer((realInvocation) => Future.value(compareDriversViewState));

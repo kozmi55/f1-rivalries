@@ -67,12 +67,14 @@ class _CompareDriversScreenState extends State<CompareDriversScreen> {
   }
 
   void removeFromFavorites() {
+    _interactor.removeFromFavorites();
     setState(() {
       _isFavorite = false;
     });
   }
 
   void addToFavorites() {
+    _interactor.addToFavorites();
     setState(() {
       _isFavorite = true;
     });

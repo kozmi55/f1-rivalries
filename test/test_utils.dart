@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
 
-void setupTestLocator(config(GetIt locator)) {
+void setupTestLocator(config(GetIt locator)) async {
   final locator = GetIt.instance;
-  locator.reset();
+  await locator.reset();
   locator.allowReassignment = true; // Allows reassignment by the config block
 
   config(locator);

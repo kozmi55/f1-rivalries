@@ -1,6 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:dio/dio.dart';
-import 'package:f1_stats_app/db/comparisions_table.dart';
+import 'package:f1_stats_app/db/comparisions_cache.dart';
 import 'package:f1_stats_app/network/api/drivers_api.dart';
 import 'package:f1_stats_app/network/entity/drivers_results_response.dart';
 import 'package:f1_stats_app/screens/compare_drivers/compare_drivers_interactor.dart';
@@ -10,13 +10,13 @@ import 'package:mockito/mockito.dart';
 
 import '../../test_utils.dart';
 
-void main() {
+void main() async {
   final _driversApi = _MockDriversApi();
-  final _comparisionTable = _MockComparisionTable();
+  final _comparisionsCache = _MockComparisionsCache();
 
-  setupTestLocator((locator) {
+  await setupTestLocator((locator) {
     locator.registerFactory<DriversApi>(() => _driversApi);
-    locator.registerFactory<ComparisionsTable>(() => _comparisionTable);
+    locator.registerFactory<ComparisionsCache>(() => _comparisionsCache);
   });
 
   setUp(() {
@@ -129,4 +129,4 @@ DriverResultsResponse _createDriverResponse(String id) {
 
 class _MockDriversApi extends Mock implements DriversApi {}
 
-class _MockComparisionTable extends Mock implements ComparisionsTable {}
+class _MockComparisionsCache extends Mock implements ComparisionsCache {}
