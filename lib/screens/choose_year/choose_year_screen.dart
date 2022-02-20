@@ -24,7 +24,7 @@ class _ChooseYearScreenState extends State<ChooseYearScreen> {
   }
 
   bool _isYearValid() {
-    return _year >= 1950 && _year <= 2020;
+    return _year >= 1950 && _year <= 2022;
   }
 
   @override
